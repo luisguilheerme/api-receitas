@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
+import com.luisguilherme.apireceitas.models.embedded.Author;
 import com.luisguilherme.apireceitas.models.entities.Recipe;
+import com.luisguilherme.apireceitas.models.entities.User;
 import com.luisguilherme.apireceitas.repositories.RecipeRepository;
+import com.luisguilherme.apireceitas.repositories.UserRepository;
 import com.luisguilherme.apireceitas.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -16,6 +19,9 @@ public class RecipeService {
 
 	@Autowired
 	RecipeRepository repository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@Autowired
 	UserService userService;
@@ -41,17 +47,23 @@ public class RecipeService {
 
 	public RecipeDTO insert(RecipeDTO dto) {
 
-		Recipe recipe = new Recipe();
-
+		Recipe recipe = new Recipe();		
+		
+		User user = userService.getMe();
+		
 		recipe.setTitle(dto.getTitle());
 		recipe.setDescription(dto.getDescription());
 		recipe.setMoment(dto.getMoment());
-		recipe.setAuthor(dto.getAuthor());
+		recipe.setAuthor(new Author(user));
 		recipe.getIngredients().addAll(dto.getIngredients());
 		recipe.getSteps().addAll(dto.getSteps());
-		recipe.getComments().addAll(dto.getComments());
 
 		recipe = repository.insert(recipe);
+		
+		user.getRecipes().add(recipe);
+		
+		userRepository.save(user);
+		
 		return new RecipeDTO(recipe);
 	}
 

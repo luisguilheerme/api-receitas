@@ -7,5 +7,7 @@ import com.luisguilherme.apireceitas.models.entities.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+	
+	User findByEmail(String username);
 
 }

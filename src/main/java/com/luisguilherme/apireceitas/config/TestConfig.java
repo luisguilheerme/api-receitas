@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import com.luisguilherme.apireceitas.models.embedded.Author;
 import com.luisguilherme.apireceitas.models.embedded.Comment;
 import com.luisguilherme.apireceitas.models.entities.Recipe;
+import com.luisguilherme.apireceitas.models.entities.Role;
 import com.luisguilherme.apireceitas.models.entities.User;
 import com.luisguilherme.apireceitas.repositories.RecipeRepository;
 import com.luisguilherme.apireceitas.repositories.UserRepository;
@@ -32,8 +33,16 @@ public class TestConfig {
 		userRepository.deleteAll();
 		recipeRepository.deleteAll();
 		
-		User maria = new User(null, "Maria dos Santos", "maria@gmail.com");
-		User alex = new User(null, "Alex da Silva", "alex@gmail.com");
+		User maria = new User(null, "Maria dos Santos", "maria@gmail.com", "$2a$12$.YLBMp/x.dvcKjMXDiNe6.RBw/9KsWdx/sQtKd.CSjGYUCcLO11Le");
+		User alex = new User(null, "Alex da Silva", "alex@gmail.com", "$2a$12$.YLBMp/x.dvcKjMXDiNe6.RBw/9KsWdx/sQtKd.CSjGYUCcLO11Le");
+		
+		Role admin = new Role(null, "ROLE_ADMIN");
+		Role user = new Role(null, "ROLE_USER");
+		
+		maria.addRole(admin);
+		maria.addRole(user);
+		
+		alex.addRole(user);
 
 		userRepository.saveAll(Arrays.asList(maria, alex));			
        
@@ -74,4 +83,5 @@ public class TestConfig {
 
 	}
 */
+
 }
