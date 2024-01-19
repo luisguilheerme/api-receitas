@@ -1,10 +1,12 @@
 package com.luisguilherme.apireceitas.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
 import com.luisguilherme.apireceitas.models.dto.UserDTO;
 import com.luisguilherme.apireceitas.models.entities.User;
 import com.luisguilherme.apireceitas.repositories.UserRepository;
@@ -21,9 +23,9 @@ public class UserService {
 		return new UserDTO(user);
 	}
 	
-	private User getEntityById(String id) {
-		Optional<User> result = repository.findById(id);
-		return result.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado"));
+	public List<RecipeDTO> getUserRecipes(String id) {
+		User user = getEntityById(id);
+		return user.getRecipes().stream().map(x -> new RecipeDTO(x)).toList();
 	}
 	
 	public UserDTO insert(UserDTO dto) {
@@ -48,5 +50,10 @@ public class UserService {
 	private void copyDtoToEntity(UserDTO dto, User user) {
 		user.setName(dto.getName());
 		user.setEmail(dto.getEmail());
+	}
+	
+	private User getEntityById(String id) {
+		Optional<User> result = repository.findById(id);
+		return result.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado"));
 	}
 }
