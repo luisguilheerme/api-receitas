@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
+import com.luisguilherme.apireceitas.models.dto.UserDTO;
 import com.luisguilherme.apireceitas.models.embedded.Author;
 import com.luisguilherme.apireceitas.models.entities.Recipe;
 import com.luisguilherme.apireceitas.models.entities.User;
@@ -51,12 +52,8 @@ public class RecipeService {
 		
 		User user = userService.getMe();
 		
-		recipe.setTitle(dto.getTitle());
-		recipe.setDescription(dto.getDescription());
-		recipe.setMoment(dto.getMoment());
+		copyDtoToEntity(dto, recipe);
 		recipe.setAuthor(new Author(user));
-		recipe.getIngredients().addAll(dto.getIngredients());
-		recipe.getSteps().addAll(dto.getSteps());
 
 		recipe = repository.insert(recipe);
 		
@@ -66,15 +63,18 @@ public class RecipeService {
 		
 		return new RecipeDTO(recipe);
 	}
-
-	public void delete(String id) {
-		getEntityById(id);
-		repository.deleteById(id);
-	}
 	
 	private Recipe getEntityById(String id) {
 		Optional<Recipe> result = repository.findById(id);
 		return result.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado"));
+	}
+	
+	private void copyDtoToEntity(RecipeDTO dto, Recipe recipe) {
+		recipe.setTitle(dto.getTitle());
+		recipe.setDescription(dto.getDescription());
+		recipe.setMoment(dto.getMoment());
+		recipe.getIngredients().addAll(dto.getIngredients());
+		recipe.getSteps().addAll(dto.getSteps());
 	}
 
 }

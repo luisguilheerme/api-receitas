@@ -46,7 +46,10 @@ public class UserService implements UserDetailsService  {
 	
 	public void delete(String id) {
 		User user = getEntityById(id);		
-		repository.deleteById(id);
+		if(user != null) {
+			repository.deleteById(id);
+		}
+		
 	}
 	
 	public UserDTO update(String id, UserDTO dto) {
