@@ -20,7 +20,7 @@ import jakarta.annotation.PostConstruct;
 @Configuration
 @Profile("test")
 public class TestConfig {
-/*
+
 	@Autowired
 	UserRepository userRepository;
 	
@@ -82,6 +82,6 @@ public class TestConfig {
 		userRepository.save(maria);
 
 	}
-*/
+
 
 }
