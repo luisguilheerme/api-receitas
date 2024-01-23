@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.luisguilherme.apireceitas.models.dto.UserDTO;
 import com.luisguilherme.apireceitas.services.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping(value = "/users")
@@ -26,30 +28,34 @@ public class UserController {
 	@Autowired
 	UserService service;
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		UserDTO dto = service.findById(id);
 		return ResponseEntity.ok().body(dto);
 	}
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PostMapping
+	@PostMapping(produces = "application/json")
 	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto) {
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 		return ResponseEntity.created(uri).body(dto);
 	}
 	
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping(value="/{id}")
+	@DeleteMapping(value="/{id}", produces = "application/json")
  	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PutMapping(value="/{id}")
+	@PutMapping(value="/{id}", produces = "application/json")
  	public ResponseEntity<UserDTO> update(@PathVariable String id, @RequestBody UserDTO dto) {
 		dto = service.update(id, dto);
 		return ResponseEntity.ok().body(dto);

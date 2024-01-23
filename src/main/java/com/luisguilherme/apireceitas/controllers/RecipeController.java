@@ -19,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
 import com.luisguilherme.apireceitas.services.RecipeService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping(value = "/recipes")
 public class RecipeController {
@@ -26,36 +28,41 @@ public class RecipeController {
 	@Autowired
 	RecipeService service;
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<RecipeDTO> findById(@PathVariable String id) {
 		RecipeDTO dto = service.findById(id);
 		return ResponseEntity.ok().body(dto);
 	}	
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping
+	@GetMapping(produces = "application/json")
 	public ResponseEntity<List<RecipeDTO>> findAll() {
 		List<RecipeDTO> result = service.findAll();
 		return ResponseEntity.ok().body(result);
 	}
 	
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping(value="/user/{userId}")
+	@GetMapping(value="/user/{userId}", produces = "application/json")
  	public ResponseEntity<List<RecipeDTO>> findByAuthor(@PathVariable String userId) {
 		List<RecipeDTO> list = service.findByAuthor(userId);
 		return ResponseEntity.ok().body(list);
 	}
 
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@GetMapping(value="/search")
+	@GetMapping(value="/search", produces = "application/json")
  	public ResponseEntity<List<RecipeDTO>> findByText(@RequestParam(value="text") String text) {
 		List<RecipeDTO> list = service.findByText(text);
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@SecurityRequirement(name= "bearerAuth")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	@PostMapping
+	@PostMapping(produces = "application/json")
 	public ResponseEntity<RecipeDTO> insert(@RequestBody RecipeDTO dto) {
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
