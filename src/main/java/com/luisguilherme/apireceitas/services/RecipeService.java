@@ -6,9 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luisguilherme.apireceitas.models.dto.CommentDTO;
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
-import com.luisguilherme.apireceitas.models.dto.UserDTO;
 import com.luisguilherme.apireceitas.models.embedded.Author;
+import com.luisguilherme.apireceitas.models.embedded.Comment;
 import com.luisguilherme.apireceitas.models.entities.Recipe;
 import com.luisguilherme.apireceitas.models.entities.User;
 import com.luisguilherme.apireceitas.repositories.RecipeRepository;
@@ -63,6 +64,23 @@ public class RecipeService {
 		
 		return new RecipeDTO(recipe);
 	}
+	
+	public CommentDTO addComment(CommentDTO commentDto, String id) {
+		
+		Recipe recipe = getEntityById(id);
+		
+		Comment comment = new Comment();
+		
+		comment.setText(commentDto.getText());
+		comment.setMoment(commentDto.getMoment());
+		comment.setAuthor(new Author(userService.getMe()));
+		
+		recipe.getComments().add(comment);
+		repository.save(recipe);
+		
+		return commentDto;
+		
+	}	
 	
 	private Recipe getEntityById(String id) {
 		Optional<Recipe> result = repository.findById(id);

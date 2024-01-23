@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.luisguilherme.apireceitas.models.dto.CommentDTO;
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
 import com.luisguilherme.apireceitas.services.RecipeService;
 
@@ -69,4 +69,12 @@ public class RecipeController {
 		return ResponseEntity.created(uri).body(dto);
 	}
 	
+	
+	@SecurityRequirement(name= "bearerAuth")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	@PostMapping(value="/{id}/comment", produces = "application/json")
+	public ResponseEntity<CommentDTO> insertComment(@PathVariable String id, @RequestBody CommentDTO commentDto) {
+		commentDto = service.addComment(commentDto, id);			
+		return ResponseEntity.ok().body(commentDto);
+	}
 }
