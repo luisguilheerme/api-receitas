@@ -35,6 +35,7 @@ public class TestConfig {
 		
 		User maria = new User(null, "Maria dos Santos", "maria@gmail.com", "$2a$12$.YLBMp/x.dvcKjMXDiNe6.RBw/9KsWdx/sQtKd.CSjGYUCcLO11Le");
 		User alex = new User(null, "Alex da Silva", "alex@gmail.com", "$2a$12$.YLBMp/x.dvcKjMXDiNe6.RBw/9KsWdx/sQtKd.CSjGYUCcLO11Le");
+		User luis = new User(null, "Luis Guilherme Maroni", "lg.maroni@gmail.com", "$2a$12$.YLBMp/x.dvcKjMXDiNe6.RBw/9KsWdx/sQtKd.CSjGYUCcLO11Le");
 		
 		Role admin = new Role(null, "ROLE_ADMIN");
 		Role user = new Role(null, "ROLE_USER");
@@ -44,9 +45,11 @@ public class TestConfig {
 		
 		alex.addRole(user);
 
-		userRepository.saveAll(Arrays.asList(maria, alex));			
+		luis.addRole(user);
+		
+		userRepository.saveAll(Arrays.asList(maria, alex, luis));			
        
-        Recipe lasagna = new Recipe(null, "Lasanha à Bolonhesa", "Uma deliciosa lasanha com carne moída e molho bechamel.", Instant.parse("2023-02-14T12:34:26Z"), new Author(maria));
+        Recipe lasagna = new Recipe(null, "Lasanha à Bolonhesa", "Uma deliciosa lasanha com carne moída e molho bechamel.", Instant.parse("2023-02-14T12:34:26Z"), new Author(luis));
         lasagna.getIngredients().add("500g de carne moída");
         lasagna.getIngredients().add("1 cebola picada");
         lasagna.getIngredients().add("2 dentes de alho picados");
@@ -77,10 +80,11 @@ public class TestConfig {
         
         recipeRepository.saveAll(Arrays.asList(lasagna, chickenCurry));
 		
-		maria.getRecipes().addAll(Arrays.asList(lasagna, chickenCurry));
+        luis.getRecipes().add(lasagna);
+		maria.getRecipes().add(chickenCurry);
 		
 		userRepository.save(maria);
-
+		userRepository.save(luis);
 	}
 
 

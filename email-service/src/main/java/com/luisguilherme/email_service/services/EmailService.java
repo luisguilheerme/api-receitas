@@ -1,5 +1,6 @@
 package com.luisguilherme.email_service.services;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -19,6 +20,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
+    @RabbitListener(queues = "email.queue")
     public void sendEmail(EmailDTO obj) {
         try{
             SimpleMailMessage message = new SimpleMailMessage();
