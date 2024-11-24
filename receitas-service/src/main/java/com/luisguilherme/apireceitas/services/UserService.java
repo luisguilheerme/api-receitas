@@ -14,6 +14,7 @@ import com.luisguilherme.apireceitas.config.util.CustomUserUtil;
 import com.luisguilherme.apireceitas.models.dto.RecipeDTO;
 import com.luisguilherme.apireceitas.models.dto.UserDTO;
 import com.luisguilherme.apireceitas.models.embedded.Author;
+import com.luisguilherme.apireceitas.models.entities.Role;
 import com.luisguilherme.apireceitas.models.entities.User;
 import com.luisguilherme.apireceitas.repositories.UserRepository;
 import com.luisguilherme.apireceitas.services.exceptions.ResourceNotFoundException;
