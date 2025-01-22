@@ -28,16 +28,12 @@ public class UserController {
 	@Autowired
 	UserService service;
 
-	@SecurityRequirement(name= "bearerAuth")
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		UserDTO dto = service.findById(id);
 		return ResponseEntity.ok().body(dto);
 	}
 
-	@SecurityRequirement(name= "bearerAuth")
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@PostMapping(produces = "application/json")
 	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto) {
 		dto = service.insert(dto);
